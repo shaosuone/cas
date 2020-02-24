@@ -12,3 +12,6 @@ build/
 bin/
 *.iml
 *.log
+/target/
+/target/
+/target/

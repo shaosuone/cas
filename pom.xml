@@ -10,7 +10,7 @@
 
     <build>
         <plugins>
-            <plugin>
+            <plugin> 
                 <groupId>com.rimerosolutions.maven.plugins</groupId>
                 <artifactId>wrapper-maven-plugin</artifactId>
                 <version>0.0.5</version>
@@ -35,7 +35,7 @@
                             <goal>repackage</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions> 
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -48,15 +48,19 @@
                     <archive>
                         <compress>false</compress>
                         <manifestFile>${manifestFileToUse}</manifestFile>
-                    </archive>
+                    </archive> 
                     <overlays>
                         <overlay>
                             <groupId>org.apereo.cas</groupId>
                             <artifactId>cas-server-webapp${app.server}</artifactId>
                         </overlay>
                     </overlays>
+                    <!-- 让war包下的json不初始化 -->
+                    <dependentWarExcludes>
+                    	**/services/*.json
+                    </dependentWarExcludes>
                 </configuration>
-            </plugin>
+            </plugin> 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -106,6 +110,19 @@
             <id>shibboleth-releases</id>
             <url>https://build.shibboleth.net/nexus/content/repositories/releases</url>
         </repository>
+        <!--添加国内镜像源地址-->
+        <repository>
+            <id>maven-ali</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public//</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </repository>
     </repositories>
 
     <profiles>
@@ -125,6 +142,48 @@
                 <!--
                 ...Additional dependencies may be placed here...
                 -->
+                
+				<!-- 数据库驱动 -->
+				<dependency>
+				    <groupId>mysql</groupId>
+				    <artifactId>mysql-connector-java</artifactId>
+				    <version>5.1.21</version>
+				</dependency>
+				<dependency>
+				    <groupId>org.apereo.cas</groupId>
+				    <artifactId>cas-server-support-jdbc-drivers</artifactId>
+				    <version>${cas.version}</version>
+				</dependency>
+				<!--jdbc认证需要添加的，这个是cas的依赖包-->
+				<dependency>
+				    <groupId>org.apereo.cas</groupId>
+				    <artifactId>cas-server-support-jdbc</artifactId>
+				    <version>${cas.version}</version>
+				</dependency>
+				
+				<!--服务注册依赖Jar-->
+				<dependency>
+				    <groupId>org.apereo.cas</groupId>
+				    <artifactId>cas-server-support-json-service-registry</artifactId>
+				    <version>${cas.version}</version>
+				</dependency>
+				<dependency>
+				    <groupId>org.apereo.cas</groupId>
+				    <artifactId>cas-server-support-rest-authentication</artifactId>
+				    <version>${cas.version}</version>
+				</dependency>
+				<!-- service 配置 json方式 -->
+				<dependency>
+				    <groupId>org.apereo.cas</groupId>
+				    <artifactId>cas-server-support-json-service-registry</artifactId>
+				    <version>${cas.version}</version>
+				</dependency>
+				<!-- 方便debug cas服务端的关于验证方面的问题 -->
+				<dependency>
+				    <groupId>org.apereo.cas</groupId>
+				    <artifactId>cas-server-support-validation</artifactId>
+				    <version>${cas.version}</version>
+				</dependency>
             </dependencies>
         </profile>
 
